@@ -1,7 +1,7 @@
 {
-  "name": "react-resizable-panels",
+  "name": "react-px-resizable-panels",
   "version": "3.0.0",
-  "description": "React components for resizable panel groups/layouts",
+  "description": "React components for resizable pixel panel groups/layouts",
   "author": "Brian Vaughn <brian.david.vaughn@gmail.com>",
   "contributors": ["Marbles <marblesfr@gmail.com>"],
   "license": "MIT",
