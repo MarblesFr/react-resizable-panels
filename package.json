@@ -1,5 +1,5 @@
 {
-  "name": "react-resizable-panels-repo",
+  "name": "react-px-resizable-panels-repo",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -10,10 +10,10 @@
     "clear:parcel-cache": "rm -rf ./.parcel-cache",
     "clear:node_modules": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules",
     "dev": "pnpm run /^dev:.*/",
-    "dev:core": "cd packages/react-resizable-panels && pnpm watch",
-    "dev:website": "cd packages/react-resizable-panels-website && pnpm watch",
-    "docs": "cd packages/react-resizable-panels-website && pnpm build",
-    "lint": "cd packages/react-resizable-panels && pnpm lint",
+    "dev:core": "cd packages/react-px-resizable-panels && pnpm watch",
+    "dev:website": "cd packages/react-px-resizable-panels-website && pnpm watch",
+    "docs": "cd packages/react-px-resizable-panels-website && pnpm build",
+    "lint": "cd packages/react-px-resizable-panels && pnpm lint",
     "prerelease": "preconstruct build",
     "prettier": "prettier --write \"**/*.{css,html,js,json,jsx,ts,tsx}\"",
     "prettier:ci": "prettier --check \"**/*.{css,html,js,json,jsx,ts,tsx}\"",
@@ -48,7 +48,7 @@
   },
   "preconstruct": {
     "packages": [
-      "packages/!(react-resizable-panels-website)"
+      "packages/!(react-px-resizable-panels-website)"
     ],
     "exports": {
       "importConditionDefaultExport": "default"

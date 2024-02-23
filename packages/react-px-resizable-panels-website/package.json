@@ -1,0 +1,31 @@
+{
+  "name": "react-px-resizable-panels-website",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "parcel build index.html",
+    "kill-port": "kill-port ${PORT:-1234}",
+    "test:e2e": "playwright test",
+    "test:e2e:debug": "DEBUG=true playwright test",
+    "watch": "parcel index.html"
+  },
+  "dependencies": {
+    "@codemirror/lang-css": "latest",
+    "@codemirror/lang-html": "latest",
+    "@codemirror/lang-javascript": "latest",
+    "@codemirror/lang-markdown": "latest",
+    "@codemirror/language": "latest",
+    "@codemirror/state": "latest",
+    "@lezer/highlight": "latest",
+    "kill-port": "latest",
+    "localforage": "latest",
+    "match-sorter": "latest",
+    "react": "experimental",
+    "react-dom": "experimental",
+    "react-px-resizable-panels": "*",
+    "react-router-dom": "latest",
+    "react-virtualized-auto-sizer": "^1.0.10",
+    "sort-by": "latest",
+    "suspense": "^0.0.38"
+  }
+}
