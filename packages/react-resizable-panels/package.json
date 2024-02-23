@@ -1,12 +1,13 @@
 {
   "name": "react-resizable-panels",
-  "version": "2.0.9",
+  "version": "3.0.0",
   "description": "React components for resizable panel groups/layouts",
   "author": "Brian Vaughn <brian.david.vaughn@gmail.com>",
+  "contributors": ["Marbles <marblesfr@gmail.com>"],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bvaughn/react-resizable-panels.git"
+    "url": "git+https://github.com/MarblesFr/react-resizable-panels"
   },
   "source": "src/index.ts",
   "main": "dist/react-resizable-panels.cjs.js",

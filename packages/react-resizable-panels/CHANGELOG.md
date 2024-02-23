@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0
+
+- Change panel sizing to use pixels instead of percentages
+
 ## 2.0.9
 
 - Fix Flex stacking context bug (#301)
