@@ -13,7 +13,6 @@ export function calculateUnsafeDefaultLayout({
   );
 
   let numPanelsWithSizes = 0;
-  let remainingSize = 100;
 
   // Distribute default sizes first
   for (let index = 0; index < panelDataArray.length; index++) {
@@ -21,10 +20,9 @@ export function calculateUnsafeDefaultLayout({
     assert(panelConstraints);
     const { defaultSize } = panelConstraints;
 
-    if (defaultSize != null) {
+    if (defaultSize != null && defaultSize != '*') {
       numPanelsWithSizes++;
       layout[index] = defaultSize;
-      remainingSize -= defaultSize;
     }
   }
 
@@ -38,12 +36,8 @@ export function calculateUnsafeDefaultLayout({
       continue;
     }
 
-    const numRemainingPanels = panelDataArray.length - numPanelsWithSizes;
-    const size = remainingSize / numRemainingPanels;
-
     numPanelsWithSizes++;
-    layout[index] = size;
-    remainingSize -= size;
+    layout[index] = 1;
   }
 
   return layout;

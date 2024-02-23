@@ -13,14 +13,12 @@ export default function HorizontalRoute() {
       headerNode={
         <>
           <p>
-            This example is a 3-column horizontal <code>PanelGroup</code>.
+            This example is a 5-column horizontal <code>PanelGroup</code>.
             Click/touch the empty space between the panels and drag to resize.
-            Arrow keys can also be used to resize panels.
           </p>
           <p>
             These panels use the <code>minSize</code> property to prevent them
-            from being resized smaller than a minimal percentage of the overall
-            group.
+            from being resized smaller than a minimal number of pixels.
           </p>
         </>
       }
@@ -33,15 +31,23 @@ function Content() {
   return (
     <div className={styles.PanelGroupWrapper}>
       <PanelGroup className={styles.PanelGroup} direction="horizontal">
-        <Panel className={styles.PanelRow} defaultSize={30} minSize={20}>
+        <Panel className={styles.PanelRow} defaultSize={150} minSize={50}>
           <div className={styles.Centered}>left</div>
         </Panel>
         <ResizeHandle className={styles.ResizeHandle} />
-        <Panel className={styles.PanelRow} minSize={30}>
+        <Panel className={styles.PanelRow} defaultSize={300} minSize={50}>
+          <div className={styles.Centered}>left</div>
+        </Panel>
+        <ResizeHandle className={styles.ResizeHandle} />
+        <Panel className={styles.PanelRow} defaultSize="*" minSize={50}>
           <div className={styles.Centered}>middle</div>
         </Panel>
         <ResizeHandle className={styles.ResizeHandle} />
-        <Panel className={styles.PanelRow} defaultSize={30} minSize={20}>
+        <Panel className={styles.PanelRow} defaultSize={100} minSize={50}>
+          <div className={styles.Centered}>right</div>
+        </Panel>
+        <ResizeHandle className={styles.ResizeHandle} />
+        <Panel className={styles.PanelRow} defaultSize={100} minSize={50}>
           <div className={styles.Centered}>right</div>
         </Panel>
       </PanelGroup>
@@ -51,15 +57,22 @@ function Content() {
 
 const CODE = `
 <PanelGroup direction="horizontal">
-  <Panel defaultSize={30} minSize={20}>
+  <Panel defaultSize={150} minSize={50}>
+    left
+  </Panel>
+  <Panel defaultSize={300} minSize={50}>
     left
   </Panel>
   <PanelResizeHandle />
-  <Panel minSize={30}>
+  <Panel defaultSize="*" minSize={50}>
     middle
   </Panel>
   <PanelResizeHandle />
-  <Panel defaultSize={30} minSize={20}>
+  <Panel defaultSize={100} minSize={50}>
+    right
+  </Panel>
+  <PanelResizeHandle />
+  <Panel defaultSize={100} minSize={50}>
     right
   </Panel>
 </PanelGroup>

@@ -8,14 +8,9 @@ import styles from "./styles.module.css";
 const LINKS = [
   { path: "horizontal", title: "Horizontal layouts" },
   { path: "vertical", title: "Vertical layouts" },
-  { path: "nested", title: "Nested groups" },
   { path: "persistence", title: "Persistent layouts" },
-  { path: "overflow", title: "Overflow content" },
   { path: "collapsible", title: "Collapsible panels" },
-  { path: "conditional", title: "Conditional panels" },
   { path: "external-persistence", title: "External persistence" },
-  { path: "imperative-panel-api", title: "Imperative Panel API" },
-  { path: "imperative-panel-group-api", title: "Imperative PanelGroup API" },
 ];
 
 export default function HomeRoute() {

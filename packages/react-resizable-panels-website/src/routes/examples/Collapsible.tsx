@@ -76,11 +76,11 @@ function Content() {
         </div>
         <Panel
           className={sharedStyles.PanelColumn}
-          collapsedSize={5}
+          collapsedSize={20}
           collapsible={true}
-          defaultSize={15}
-          maxSize={20}
-          minSize={15}
+          defaultSize={150}
+          maxSize={200}
+          minSize={80}
           onCollapse={onCollapse}
           onExpand={onExpand}
         >
@@ -111,7 +111,7 @@ function Content() {
               : styles.ResizeHandle
           }
         />
-        <Panel className={sharedStyles.PanelColumn} minSize={50}>
+        <Panel className={sharedStyles.PanelColumn} minSize={50} defaultSize='*'>
           <div className={styles.SourceTabs}>
             {Array.from(openFiles).map((file) => (
               <div
@@ -177,11 +177,11 @@ const FILES: File[] = FILE_PATHS.map(([path, code]) => {
 const CODE = `
 <PanelGroup direction="horizontal">
   <SideTabBar />
-  <Panel collapsible={true} collapsedSize={35} minSize={10}>
+  <Panel collapsible={true} collapsedSize={20} minSize={80}>
     <SourceBrowser />
   </Panel>
   <PanelResizeHandle />
-  <Panel>
+  <Panel defaultSize="*">
     <SourceViewer />
   </Panel>
 </PanelGroup>

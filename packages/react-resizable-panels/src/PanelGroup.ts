@@ -15,12 +15,11 @@ import {
 } from "./PanelResizeHandleRegistry";
 import useIsomorphicLayoutEffect from "./hooks/useIsomorphicEffect";
 import useUniqueId from "./hooks/useUniqueId";
-import { useWindowSplitterPanelGroupBehavior } from "./hooks/useWindowSplitterPanelGroupBehavior";
 import { Direction } from "./types";
 import { adjustLayoutByDelta } from "./utils/adjustLayoutByDelta";
 import { areEqual } from "./utils/arrays";
 import { assert } from "./utils/assert";
-import { calculateDeltaPercentage } from "./utils/calculateDeltaPercentage";
+import { calculateDelta } from "./utils/calculateDelta";
 import { calculateUnsafeDefaultLayout } from "./utils/calculateUnsafeDefaultLayout";
 import { callPanelCallbacks } from "./utils/callPanelCallbacks";
 import { compareLayouts } from "./utils/compareLayouts";
@@ -28,7 +27,7 @@ import { computePanelFlexBoxStyle } from "./utils/computePanelFlexBoxStyle";
 import debounce from "./utils/debounce";
 import { determinePivotIndices } from "./utils/determinePivotIndices";
 import { getResizeHandleElement } from "./utils/dom/getResizeHandleElement";
-import { isKeyDown, isMouseEvent, isTouchEvent } from "./utils/events";
+import { isMouseEvent, isTouchEvent } from "./utils/events";
 import { getResizeEventCursorPosition } from "./utils/events/getResizeEventCursorPosition";
 import { initializeDefaultStorage } from "./utils/initializeDefaultStorage";
 import {
@@ -38,13 +37,13 @@ import {
 import { validatePanelConstraints } from "./utils/validatePanelConstraints";
 import { validatePanelGroupLayout } from "./utils/validatePanelGroupLayout";
 import {
+  createElement,
   CSSProperties,
   ForwardedRef,
+  forwardRef,
   HTMLAttributes,
   PropsWithChildren,
   ReactElement,
-  createElement,
-  forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -211,15 +210,15 @@ function PanelGroupWithForwardedRef({
     committedValuesRef.current.storage = storage;
   });
 
-  useWindowSplitterPanelGroupBehavior({
-    committedValuesRef,
-    eagerValuesRef,
-    groupId,
-    layout,
-    panelDataArray: eagerValuesRef.current.panelDataArray,
-    setLayout,
-    panelGroupElement: panelGroupElementRef.current,
-  });
+  // useWindowSplitterPanelGroupBehavior({
+  //   committedValuesRef,
+  //   eagerValuesRef,
+  //   groupId,
+  //   layout,
+  //   panelDataArray: eagerValuesRef.current.panelDataArray,
+  //   setLayout,
+  //   panelGroupElement: panelGroupElementRef.current,
+  // });
 
   useEffect(() => {
     const { panelDataArray } = eagerValuesRef.current;
@@ -336,12 +335,15 @@ function PanelGroupWithForwardedRef({
         pivotIndices,
       } = panelDataHelper(panelDataArray, panelData, prevLayout);
 
-      assert(panelSize != null);
-
-      if (panelSize !== collapsedSize) {
+      if (panelSize && panelSize !== collapsedSize) {
         // Store size before collapse;
         // This is the size that gets restored if the expand() API is used.
         panelSizeBeforeCollapseRef.current.set(panelData.id, panelSize);
+
+        const panelGroupElement = panelGroupElementRef.current;
+        if (!panelGroupElement) {
+          return () => null;
+        }
 
         const isLastPanel =
           findPanelDataIndex(panelDataArray, panelData) ===
@@ -355,7 +357,8 @@ function PanelGroupWithForwardedRef({
           layout: prevLayout,
           panelConstraints: panelConstraintsArray,
           pivotIndices,
-          trigger: "imperative-api",
+          panelGroupElement,
+          direction
         });
 
         if (!compareLayouts(prevLayout, nextLayout)) {
@@ -400,6 +403,11 @@ function PanelGroupWithForwardedRef({
           panelData.id
         );
 
+        const panelGroupElement = panelGroupElementRef.current;
+        if (!panelGroupElement) {
+          return () => null;
+        }
+
         const baseSize =
           prevPanelSize != null && prevPanelSize >= minSize
             ? prevPanelSize
@@ -415,7 +423,8 @@ function PanelGroupWithForwardedRef({
           layout: prevLayout,
           panelConstraints: panelConstraintsArray,
           pivotIndices,
-          trigger: "imperative-api",
+          panelGroupElement,
+          direction
         });
 
         if (!compareLayouts(prevLayout, nextLayout)) {
@@ -443,14 +452,12 @@ function PanelGroupWithForwardedRef({
 
     const { panelSize } = panelDataHelper(panelDataArray, panelData, layout);
 
-    assert(panelSize != null);
-
     return panelSize;
   }, []);
 
   // This API should never read from committedValuesRef
   const getPanelStyle = useCallback(
-    (panelData: PanelData, defaultSize: number | undefined) => {
+    (panelData: PanelData, defaultSize: number | undefined | "*") => {
       const { panelDataArray } = eagerValuesRef.current;
 
       const panelIndex = findPanelDataIndex(panelDataArray, panelData);
@@ -461,6 +468,7 @@ function PanelGroupWithForwardedRef({
         layout,
         panelData: panelDataArray,
         panelIndex,
+        direction
       });
     },
     [dragState, layout]
@@ -489,9 +497,7 @@ function PanelGroupWithForwardedRef({
       panelSize,
     } = panelDataHelper(panelDataArray, panelData, layout);
 
-    assert(panelSize != null);
-
-    return !collapsible || panelSize > collapsedSize;
+    return !collapsible || !panelSize || panelSize > collapsedSize;
   }, []);
 
   const registerPanel = useCallback((panelData: PanelData) => {
@@ -590,7 +596,6 @@ function PanelGroupWithForwardedRef({
         direction,
         dragState,
         id: groupId,
-        keyboardResizeBy,
         onLayout,
       } = committedValuesRef.current;
       const { layout: prevLayout, panelDataArray } = eagerValuesRef.current;
@@ -603,13 +608,10 @@ function PanelGroupWithForwardedRef({
         panelGroupElement
       );
 
-      let delta = calculateDeltaPercentage(
+      let delta = calculateDelta(
         event,
-        dragHandleId,
         direction,
         dragState,
-        keyboardResizeBy,
-        panelGroupElement
       );
       if (delta === 0) {
         return;
@@ -630,7 +632,8 @@ function PanelGroupWithForwardedRef({
         layout: initialLayout ?? prevLayout,
         panelConstraints,
         pivotIndices,
-        trigger: isKeyDown(event) ? "keyboard" : "mouse-or-touch",
+        panelGroupElement,
+        direction
       });
 
       const layoutChanged = !compareLayouts(prevLayout, nextLayout);
@@ -699,6 +702,11 @@ function PanelGroupWithForwardedRef({
         prevLayout
       );
 
+      const panelGroupElement = panelGroupElementRef.current;
+      if (!panelGroupElement) {
+        return () => null;
+      }
+
       assert(panelSize != null);
 
       const isLastPanel =
@@ -713,7 +721,8 @@ function PanelGroupWithForwardedRef({
         layout: prevLayout,
         panelConstraints: panelConstraintsArray,
         pivotIndices,
-        trigger: "imperative-api",
+        panelGroupElement,
+        direction
       });
 
       if (!compareLayouts(prevLayout, nextLayout)) {
@@ -747,7 +756,7 @@ function PanelGroupWithForwardedRef({
       const {
         collapsedSize: nextCollapsedSize = 0,
         collapsible: nextCollapsible,
-        maxSize: nextMaxSize = 100,
+        maxSize: nextMaxSize,
         minSize: nextMinSize = 0,
       } = panelData.constraints;
 
@@ -770,7 +779,7 @@ function PanelGroupWithForwardedRef({
         }
       } else if (prevPanelSize < nextMinSize) {
         resizePanel(panelData, nextMinSize);
-      } else if (prevPanelSize > nextMaxSize) {
+      } else if (nextMaxSize && prevPanelSize > nextMaxSize) {
         resizePanel(panelData, nextMaxSize);
       }
     },

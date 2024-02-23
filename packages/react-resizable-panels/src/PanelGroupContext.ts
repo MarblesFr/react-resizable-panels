@@ -16,10 +16,10 @@ export type TPanelGroupContext = {
   direction: "horizontal" | "vertical";
   dragState: DragState | null;
   expandPanel: (panelData: PanelData) => void;
-  getPanelSize: (panelData: PanelData) => number;
+  getPanelSize: (panelData: PanelData) => number | undefined;
   getPanelStyle: (
     panelData: PanelData,
-    defaultSize: number | undefined
+    defaultSize: number | undefined | "*"
   ) => CSSProperties;
   groupId: string;
   isPanelCollapsed: (panelData: PanelData) => boolean;

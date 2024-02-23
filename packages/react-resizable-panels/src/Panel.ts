@@ -31,7 +31,7 @@ export type PanelCallbacks = {
 export type PanelConstraints = {
   collapsedSize?: number | undefined;
   collapsible?: boolean | undefined;
-  defaultSize?: number | undefined;
+  defaultSize?: number | undefined | "*";
   maxSize?: number | undefined;
   minSize?: number | undefined;
 };
@@ -48,7 +48,7 @@ export type ImperativePanelHandle = {
   collapse: () => void;
   expand: () => void;
   getId(): string;
-  getSize(): number;
+  getSize(): number | undefined;
   isCollapsed: () => boolean;
   isExpanded: () => boolean;
   resize: (size: number) => void;
@@ -62,7 +62,7 @@ export type PanelProps = Omit<
     className?: string;
     collapsedSize?: number | undefined;
     collapsible?: boolean | undefined;
-    defaultSize?: number | undefined;
+    defaultSize?: number | undefined | "*";
     id?: string;
     maxSize?: number | undefined;
     minSize?: number | undefined;

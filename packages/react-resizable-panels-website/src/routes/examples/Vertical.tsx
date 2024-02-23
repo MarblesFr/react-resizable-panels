@@ -13,14 +13,12 @@ export default function VerticalRoute() {
       headerNode={
         <>
           <p>
-            This example is a 2-row vertical <code>PanelGroup</code>.
+            This example is a 3-row vertical <code>PanelGroup</code>.
             Click/touch the empty space between the panels and drag to resize.
-            Arrow keys can also be used to resize panels.
           </p>
           <p>
             These panels use the <code>maxSize</code> property to prevent them
-            from being resized larger than a maximal percentage of the overall
-            group.
+            from being resized larger than a maximal number of pixels.
           </p>
         </>
       }
@@ -37,12 +35,16 @@ function Content() {
           className={styles.PanelColumn}
           defaultSize={50}
           maxSize={75}
-          minSize={10}
+          minSize={30}
         >
           <div className={styles.Centered}>top</div>
         </Panel>
         <ResizeHandle className={styles.ResizeHandle} />
-        <Panel className={styles.PanelColumn} maxSize={75} minSize={10}>
+        <Panel className={styles.PanelRow} defaultSize="*" minSize={50}>
+          <div className={styles.Centered}>middle</div>
+        </Panel>
+        <ResizeHandle className={styles.ResizeHandle} />
+        <Panel className={styles.PanelColumn} defaultSize={50} maxSize={75} minSize={30}>
           <div className={styles.Centered}>bottom</div>
         </Panel>
       </PanelGroup>
@@ -52,12 +54,16 @@ function Content() {
 
 const CODE = `
 <PanelGroup direction="vertical">
-  <Panel maxSize={75}>
-    top
+  <Panel defaultSize={50} maxSize={75} minSize={30}>
+    <div>top</div>
   </Panel>
   <PanelResizeHandle />
-  <Panel maxSize={75}>
-    bottom
+  <Panel defaultSize="*" minSize={50}>
+    <div>middle</div>
+  </Panel>
+  <PanelResizeHandle />
+  <Panel defaultSize={50} maxSize={75} minSize={30}>
+    <div>bottom</div>
   </Panel>
 </PanelGroup>
 `;

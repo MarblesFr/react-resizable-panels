@@ -1,7 +1,6 @@
 import { Root, createRoot } from "react-dom/client";
 import { act } from "react-dom/test-utils";
-import type { PanelResizeHandleProps } from "react-resizable-panels";
-import { Panel, PanelGroup, PanelResizeHandle } from ".";
+import {Panel, PanelGroup, PanelResizeHandle, PanelResizeHandleProps} from ".";
 import { assert } from "./utils/assert";
 import { getResizeHandleElement } from "./utils/dom/getResizeHandleElement";
 import {

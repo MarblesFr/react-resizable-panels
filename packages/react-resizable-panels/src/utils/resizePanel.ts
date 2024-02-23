@@ -19,7 +19,7 @@ export function resizePanel({
   let {
     collapsedSize = 0,
     collapsible,
-    maxSize = 100,
+    maxSize,
     minSize = 0,
   } = panelConstraints;
 
@@ -37,7 +37,9 @@ export function resizePanel({
     }
   }
 
-  size = Math.min(maxSize, size);
+  if (maxSize) {
+    size = Math.min(maxSize, size);
+  }
   size = parseFloat(size.toFixed(PRECISION));
 
   return size;

@@ -21,17 +21,17 @@ export function validatePanelConstraints({
       collapsedSize = 0,
       collapsible = false,
       defaultSize,
-      maxSize = 100,
+      maxSize,
       minSize = 0,
     } = panelConstraints;
 
-    if (minSize > maxSize) {
+    if (maxSize && minSize > maxSize) {
       warnings.push(
         `min size (${minSize}%) should not be greater than max size (${maxSize}%)`
       );
     }
 
-    if (defaultSize != null) {
+    if (defaultSize != null && defaultSize != '*') {
       if (defaultSize < 0) {
         warnings.push("default size should not be less than 0");
       } else if (
@@ -41,9 +41,7 @@ export function validatePanelConstraints({
         warnings.push("default size should not be less than min size");
       }
 
-      if (defaultSize > 100) {
-        warnings.push("default size should not be greater than 100");
-      } else if (defaultSize > maxSize) {
+      if (maxSize && defaultSize > maxSize) {
         warnings.push("default size should not be greater than max size");
       }
     }
