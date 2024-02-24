@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.3
+
+- Actually fix build
+
+## 3.0.2
+
+- Fix build
+
 ## 3.0.1
 
 - Fully rename package
