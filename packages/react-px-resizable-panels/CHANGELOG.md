@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.4
+
+- Remove panel resize logs
+
 ## 3.0.3
 
 - Actually fix build

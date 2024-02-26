@@ -61,11 +61,7 @@ export function adjustLayoutByDelta({
 
     let flexMinDelta = (panelConstraintsArray[flexIndex]?.minSize ?? 0) - flexSize;
 
-    console.log(flexMinDelta);
-
     const frameDiff = delta - ((isHorizontal ? panelList[pivotIndex]?.clientWidth ?? 0 : panelList[pivotIndex]?.clientHeight ?? 0) - (prevLayout[pivotIndex] ?? 0));
-
-    console.log(frameDiff)
 
     if (frameDiff > 0) {
       if (flexMinDelta + frameDiff > 0) {
